@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  lambda-ec2-evening-stop
+
+  SAM Template for lambda-ec2-evening-stop
+
+Globals:
+  Function:
+    Timeout: 30
+
+Resources:
+  LambdaEc2EveningStop:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src.app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Policies:
+        - Statement:
+          - Sid: Ec2MinimumRights
+            Effect: Allow
+            Action:
+              - ec2:DescribeInstances
+              - ec2:StopInstances
+            Resource: "*"
+      Events:
+        EveryDay:
+          Type: Schedule
+          Properties:
+            Name: LambdaEc2EveningStop
+            Description: Stop all EC2 that has the tag soloio:autoscaledown:ec2 set to true.
+            Schedule: "cron(0 21 * * ? *)"
+            Enabled: true

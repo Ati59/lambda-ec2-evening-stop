@@ -1,0 +1,25 @@
+= Lambda EC2 evening stopper
+
+== Description
+
+A little lambda that permits to stop EC2 each evening for you.
+
+This should permits to reduce EC2 costs.
+
+== Commands
+
+=== Creating SAM bucket (if not already done)
+
+[source, bash]
+aws s3 mb s3://ati-sam-packages-yoowox10
+aws s3api put-bucket-tagging --bucket ati-sam-packages-yoowox10 --tagging TagSet='[{Key="created-by",Value="aurelien_tison"},{Key="team",Value="customer-success"},{Key="purpose",Value="customer-support"}]'
+
+=== Build docker
+
+[source, bash]
+sam build && sam deploy
+
+=== Delete function
+
+[source, bash]
+sam delete
